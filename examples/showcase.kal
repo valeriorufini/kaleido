@@ -1,0 +1,29 @@
+# Closures, recursion and higher-order functions in Kaleido
+
+fn fact(n) => if n <= 1 then 1 else n * fact(n - 1)
+fn fib(n)  => if n < 2 then n else fib(n - 1) + fib(n - 2)
+
+print("10! =", fact(10))
+print("fib(20) =", fib(20))
+print("2^3^2 =", 2 ^ 3 ^ 2)        # right associative => 512
+print("-2^2 =", -2 ^ 2)            # unary binds looser than ^ => -4
+
+# closures capture their environment
+fn makeCounter(step) => fn(x) => x + step
+let addFive = makeCounter(5)
+print("addFive(10) =", addFive(10))
+
+# functions are values: compose and apply twice
+let compose = fn(f, g) => fn(x) => f(g(x))
+let twice   = fn(f) => compose(f, f)
+print("twice(addFive)(0) =", twice(addFive)(0))
+
+# Newton's method for square roots, written in the language itself
+fn newton(x, guess, n) => if n == 0 then guess else newton(x, (guess + x / guess) / 2, n - 1)
+print("newton sqrt(2) =", newton(2, 1, 8), "| builtin =", sqrt(2))
+
+# deep recursion works thanks to the big interpreter stack
+fn sumTo(n) => if n == 0 then 0 else n + sumTo(n - 1)
+print("sumTo(5000) =", sumTo(5000))
+
+print("Hello " + "Kaleido " + 2026)
